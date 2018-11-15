@@ -20,7 +20,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VueAxios, axios);
 Vue.use(VueAuthenticate, {
-  tokenName: 'access_token',
+  tokenName: 'authorizationToken',
   baseUrl: process.env.VUE_APP_BASE_URL,
   storageType: 'cookieStorage',
   providers: {
