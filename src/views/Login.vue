@@ -37,15 +37,9 @@ export default {
         this.$auth.logout();
       }
       this.$auth.authenticate(provider).then(() => {
-        this.$http.get('https://www.googleapis.com/plus/v1/people/me/openIdConnect').then((response) => {
-          if (!response) {
-            this.failed = true;
-          } else {
-            this.$store.commit('isAuthenticated',
-              { isAuthenticated: true });
-            this.$router.push({ name: 'Board' });
-          }
-        });
+        this.$store.commit('isAuthenticated',
+          { isAuthenticated: true });
+        this.$router.push({ name: 'Board' });
       }).catch(() => {
         this.failed = true;
       });
