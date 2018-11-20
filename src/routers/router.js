@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Board from '@/views/Board.vue';
 import Login from '@/views/Login.vue';
-import store from './store';
+import store from '../store/store';
 
 Vue.use(Router);
 
@@ -11,6 +11,7 @@ const router = new Router({
     {
       path: '/',
       redirect: '/board',
+      meta: { auth: false },
     },
     {
       path: '/board',
@@ -43,5 +44,6 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
 
 export default router;

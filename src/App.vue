@@ -7,11 +7,14 @@
 <script>
 export default {
   name: 'app',
+  mounted() {
+    this.$store.dispatch('updateLoginStatus');
+  },
 };
 </script>
 
 <style>
-  body, html, #app{
+  body, html, #app {
     height: 100%;
   }
 </style>

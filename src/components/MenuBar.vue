@@ -7,7 +7,7 @@
 
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav class="ml-auto" right>
-        <b-button variant="outline-light" @click="logout()">
+        <b-button variant="outline-light" @click="signOut()">
           Signout
         </b-button>
       </b-navbar-nav>
@@ -34,13 +34,9 @@ export default {
     'b-button': bButton,
   },
   methods: {
-    logout() {
-      this.$auth.logout().then(() => {
-        if (!this.$auth.isAuthenticated()) {
-          this.$store.commit('isAuthenticated',
-            { isAuthenticated: false });
-          this.$router.push({ name: 'Login' });
-        }
+    signOut() {
+      this.$store.dispatch('signOut').then(() => {
+        this.$router.push({ name: 'Login' });
       });
     },
   },
