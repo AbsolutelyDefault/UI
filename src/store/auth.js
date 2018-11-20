@@ -31,8 +31,7 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
   },
 
   bindRequestInterceptor($auth) {
-    // eslint-disable-next-line prefer-destructuring
-    const tokenHeader = $auth.options.tokenHeader;
+    const { tokenHeader } = $auth.options;
 
     $auth.$http.interceptors.request.use((config) => {
       if ($auth.isAuthenticated()) {
