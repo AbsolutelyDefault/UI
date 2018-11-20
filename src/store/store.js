@@ -9,7 +9,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isAuthenticated: true,
+    isAuthenticated: false,
   },
   mutations: {
     isAuthenticated(state, payload) {
@@ -17,55 +17,37 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    signOut({ commit }) {
-      return new Promise((resolve) => {
+    async signOut({ commit }) {
+      commit('isAuthenticated', {
+        isAuthenticated: false,
+      });
+      if (vueAuth.isAuthenticated()) {
+        await vueAuth.logout();
+      }
+    },
+    async signInSocial({ commit }, params) {
+      await vueAuth.authenticate(params.provider);
+      commit('isAuthenticated', {
+        isAuthenticated: vueAuth.isAuthenticated(),
+      });
+    },
+    async getLoginStatus() {
+      const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/status`);
+      if (response.data.loggedIn) {
+        return;
+      }
+      throw new Error();
+    },
+    async updateLoginStatus({ commit, dispatch }) {
+      try {
+        await dispatch('getLoginStatus');
         commit('isAuthenticated', {
-          isAuthenticated: false,
+          isAuthenticated: true,
         });
-        if (vueAuth.isAuthenticated()) {
-          vueAuth.logout()
-            .then(() => {
-              resolve();
-            });
-        } else {
-          resolve();
-        }
-      });
-    },
-    signInSocial({ commit }, params) {
-      return vueAuth.authenticate(params.provider)
-        .then(() => {
-          commit('isAuthenticated', {
-            isAuthenticated: vueAuth.isAuthenticated(),
-          });
-        });
-    },
-    getLoginStatus() {
-      return new Promise((resolve, reject) => {
-        axios.get(`${process.env.VUE_APP_BASE_URL}/status`)
-          .then((resp) => {
-            if (resp.data.loggedIn) {
-              resolve();
-            } else {
-              reject();
-            }
-          })
-          .catch(() => {
-            reject();
-          });
-      });
-    },
-    updateLoginStatus({ commit, dispatch }) {
-      dispatch('getLoginStatus')
-        .then(() => {
-          commit('isAuthenticated', {
-            isAuthenticated: true,
-          });
-        })
-        .catch(() => {
-          dispatch('signOut')
-            .then(router.push({ name: 'Login' }));
-        });
+      } catch {
+        await dispatch('signOut');
+        router.push({ name: 'XLogin' });
+      }
     },
   },
 });
