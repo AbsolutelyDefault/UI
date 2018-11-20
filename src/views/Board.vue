@@ -21,5 +21,10 @@ export default {
     'b-row': bRow,
     'menu-bar': MenuBar,
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.$store.dispatch('updateLoginStatus');
+    });
+  },
 };
 </script>

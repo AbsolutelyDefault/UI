@@ -33,16 +33,13 @@ export default {
   },
   methods: {
     auth(provider) {
-      if (this.$store.state.isAuthenticated) {
-        this.$auth.logout();
-      }
-      this.$auth.authenticate(provider).then(() => {
-        this.$store.commit('isAuthenticated',
-          { isAuthenticated: true });
-        this.$router.push({ name: 'Board' });
-      }).catch(() => {
-        this.failed = true;
-      });
+      this.$store.dispatch('signInSocial', { provider })
+        .then(() => {
+          this.$router.push({ name: 'Board' });
+        })
+        .catch(() => {
+          this.failed = true;
+        });
     },
   },
 };
