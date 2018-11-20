@@ -9,7 +9,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isAuthenticated: true,
+    isAuthenticated: vueAuth.isAuthenticated(),
   },
   mutations: {
     isAuthenticated(state, payload) {
@@ -46,7 +46,7 @@ export default new Vuex.Store({
         });
       } catch {
         await dispatch('signOut');
-        router.push({ name: 'XLogin' });
+        router.push({ name: 'Login' });
       }
     },
   },
