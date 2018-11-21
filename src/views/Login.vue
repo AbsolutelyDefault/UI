@@ -1,12 +1,14 @@
 <template>
-  <form class="text-center form-signin">
-    <h1 class="h1 mb-3 font-weight-bold">D E F A U L T</h1>
-    <b-alert v-if="failed" show variant="danger">Failed to sign in</b-alert>
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <b-button variant="danger" size="lg" @click="auth('google')">
-      <font-awesome-icon :icon="['fab', 'google-plus-g']"/> Sign in with Google
-    </b-button>
-  </form>
+  <div id="login-page">
+    <form class="text-center form-signin">
+      <h1 class="h1 mb-3 font-weight-bold">D E F A U L T</h1>
+      <b-alert v-if="failed" show variant="danger">Failed to sign in</b-alert>
+      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <b-button variant="danger" size="lg" @click="auth('google')">
+        <font-awesome-icon :icon="['fab', 'google-plus-g']"/>Sign in with Google
+      </b-button>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -24,13 +26,6 @@ export default {
     'b-button': bButton,
     'b-alert': bAlert,
   },
-  // TODO: replace lifecycle hooks with something else
-  mounted() {
-    document.getElementById('app').className = 'signin-app';
-  },
-  beforeDestroy() {
-    document.getElementById('app').className = '';
-  },
   methods: {
     auth(provider) {
       this.$store.dispatch('signInSocial', { provider })
@@ -45,7 +40,8 @@ export default {
 };
 </script>
 <style>
-  .signin-app {
+  #login-page {
+    height: 100%;
     display: -ms-flexbox;
     display: -webkit-box;
     display: flex;
