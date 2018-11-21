@@ -142,6 +142,9 @@ export default new Vuex.Store({
         Object.assign(item, { id: state.nextTaskId }));
       state.nextTaskId += 1;
     },
+    deleteTask(state, { id, columnId }) {
+      Vue.delete(state.columns[columnId].tasks, id);
+    },
     addLine(state, item) {
       Vue.set(state.columns,
         state.nextLineId,

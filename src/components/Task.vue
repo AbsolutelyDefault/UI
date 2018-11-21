@@ -4,7 +4,10 @@
           header-bg-variant="transparent"
           class="mb-2"
           body-class="task-body">
-    <h6 slot="header" class="text-center task-header">{{item.name}}</h6>
+    <div slot="header">
+      <h6 class="task-header float-left">{{item.name}}</h6>
+      <h6 class="task-header float-right" @click="deleteTask"><font-awesome-icon icon="times"/></h6>
+    </div>
     <p class="card-text">
       {{item.description}}
     </p>
@@ -16,9 +19,17 @@ import bCard from 'bootstrap-vue/es/components/card/card';
 
 export default {
   name: 'Task',
-  props: ['item'],
+  props: ['item', 'columnId'],
   components: {
     'b-card': bCard,
+  },
+  methods: {
+    deleteTask() {
+      this.$store.commit('deleteTask', {
+        id: this.item.id,
+        columnId: this.columnId,
+      });
+    },
   },
 };
 </script>

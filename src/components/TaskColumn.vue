@@ -1,8 +1,8 @@
 <template>
   <b-card class="mh-100" bg-variant="light" body-class="card-column-body">
     <h5 slot="header" class="mb-0 text-center">{{item.name}}</h5>
-    <div v-for="item in item.tasks" :key="item.id">
-      <item :item="item"></item>
+    <div v-for="task in item.tasks" :key="task.id">
+      <item :item="task" :columnId="item.id"></item>
     </div>
     <div slot="footer">
       <b-button variant="outline-primary" class="add-task-btn" @click="addNewTask">
