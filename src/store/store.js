@@ -71,7 +71,7 @@ export default new Vuex.Store({
       2: {
         id: 2,
         order: 2,
-        name: 'Blocked (waiting)',
+        name: 'Blocked by blocking request of seven blocks (waiting)',
         tasks: {
           2: {
             id: 2,
@@ -87,7 +87,7 @@ export default new Vuex.Store({
         tasks: {
           3: {
             id: 3,
-            name: 'Task 3',
+            name: 'Very long task name, so long task name Very long task name Very long task name',
             description: 'Description 3',
           },
         },
@@ -142,11 +142,17 @@ export default new Vuex.Store({
         Object.assign(item, { id: state.nextTaskId }));
       state.nextTaskId += 1;
     },
+    deleteTask(state, { id, columnId }) {
+      Vue.delete(state.columns[columnId].tasks, id);
+    },
     addLine(state, item) {
       Vue.set(state.columns,
         state.nextLineId,
         Object.assign(item, { id: state.nextLineId, tasks: {} }));
       state.nextLineId += 1;
+    },
+    deleteColumn(state, { id }) {
+      Vue.delete(state.columns, id);
     },
   },
   actions: {
