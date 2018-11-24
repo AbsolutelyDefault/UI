@@ -4,9 +4,11 @@
           header-bg-variant="transparent"
           class="mb-2"
           body-class="task-body">
-    <div slot="header">
-      <h6 class="task-header float-left">{{item.name}}</h6>
-      <h6 class="task-header float-right" @click="deleteTask"><font-awesome-icon icon="times"/></h6>
+    <div slot="header" class="header-container">
+      <h6 class="task-header header-text">{{item.name}}</h6>
+      <h6 class="task-header header-button" @click="deleteTask">
+        <font-awesome-icon icon="times"/>
+      </h6>
     </div>
     <p class="card-text">
       {{item.description}}
