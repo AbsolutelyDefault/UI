@@ -1,6 +1,6 @@
 <template>
   <div id="board">
-    <menu-bar></menu-bar>
+    <menu-bar class="no-shrink"></menu-bar>
     <b-container class="column-container" fluid>
       <b-row class="flex-row flex-nowrap h-100">
         <b-col v-for="item in columns" :key="item.id" class="task-column-wrapper">
@@ -51,6 +51,9 @@ export default {
 };
 </script>
 <style>
+  .no-shrink {
+    flex-shrink: 0;
+  }
   #board {
     display: flex;
     flex-direction: column;
