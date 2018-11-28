@@ -1,13 +1,20 @@
 <template>
   <b-card class="mh-100" bg-variant="light" body-class="card-column-body">
     <div slot="header" class="header-container">
-      <h5 class="task-header header-text">{{item.name}}</h5>
+      <textarea-autosize
+        placeholder="Type something here..."
+        class="form-control-plaintext h5 header-text"
+        v-model="name"
+        rows="1"
+        spellcheck="false"
+        @change.native="updateName"
+      ></textarea-autosize>
       <h5 class="task-header header-button" @click="deleteColumn">
         <font-awesome-icon icon="times"/>
       </h5>
     </div>
-    <div v-for="task in item.tasks" :key="task.id">
-      <item :item="task" :columnId="item.id"></item>
+    <div v-for="task in item.tasks" :key="task._id">
+      <item :item="task" :columnId="item._id"></item>
     </div>
     <div slot="footer">
       <b-button variant="outline-primary" class="add-task-btn" @click="addNewTask">
@@ -29,17 +36,25 @@ export default {
     'b-card': bCard,
     'b-button': bButton,
   },
+  data() {
+    return {
+      name: this.item.name,
+    };
+  },
   methods: {
     addNewTask() {
-      this.$store.commit('addTask', {
+      this.$store.dispatch('addTask', {
         item: { name: 'New task', description: 'Description' },
-        lineId: this.item.id,
+        columnId: this.item._id,
       });
     },
     deleteColumn() {
-      this.$store.commit('deleteColumn', {
-        id: this.item.id,
+      this.$store.dispatch('deleteColumn', {
+        id: this.item._id,
       });
+    },
+    updateName() {
+      this.$store.dispatch('updateColumnName', { id: this.item._id, name: this.name });
     },
   },
 };
@@ -55,6 +70,7 @@ export default {
   }
   .header-text {
     flex-grow: 1;
+    padding-top: 0px;
     padding-right: 8px;
   }
   .header-button {

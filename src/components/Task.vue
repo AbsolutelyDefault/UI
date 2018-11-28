@@ -5,14 +5,26 @@
           class="mb-2"
           body-class="task-body">
     <div slot="header" class="header-container">
-      <h6 class="task-header header-text">{{item.name}}</h6>
+      <textarea-autosize
+        placeholder="Type something here..."
+        class="form-control-plaintext h6 header-text"
+        v-model="name"
+        rows="1"
+        spellcheck="false"
+        @change.native="updateTask"
+      ></textarea-autosize>
       <h6 class="task-header header-button" @click="deleteTask">
         <font-awesome-icon icon="times"/>
       </h6>
     </div>
-    <p class="card-text">
-      {{item.description}}
-    </p>
+    <textarea-autosize
+      placeholder="Type something here..."
+      class="form-control-plaintext card-text"
+      v-model="description"
+      rows="1"
+      spellcheck="false"
+      @change.native="updateTask"
+    ></textarea-autosize>
   </b-card>
 </template>
 
@@ -25,11 +37,25 @@ export default {
   components: {
     'b-card': bCard,
   },
+  data() {
+    return {
+      name: this.item.name,
+      description: this.item.description,
+    };
+  },
   methods: {
     deleteTask() {
-      this.$store.commit('deleteTask', {
-        id: this.item.id,
+      this.$store.dispatch('deleteTask', {
+        taskId: this.item._id,
         columnId: this.columnId,
+      });
+    },
+    updateTask() {
+      this.$store.dispatch('updateTask', {
+        columnId: this.columnId,
+        taskId: this.item._id,
+        name: this.name,
+        description: this.description,
       });
     },
   },
