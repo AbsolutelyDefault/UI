@@ -90,9 +90,7 @@ export default new Vuex.Store({
       commit('setColumns', response.data);
     },
     async deleteColumn({ commit }, { id }) {
-      await axios.delete(`${process.env.VUE_APP_BASE_URL}/api/column`, {
-        id,
-      });
+      await axios.delete(`${process.env.VUE_APP_BASE_URL}/api/column`, { data: { id } });
       commit('deleteColumn', id);
     },
     async addColumn({ commit }, { name }) {
@@ -103,8 +101,10 @@ export default new Vuex.Store({
     },
     async deleteTask({ commit }, { columnId, taskId }) {
       await axios.delete(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
-        columnId,
-        id: taskId,
+        data: {
+          columnId,
+          id: taskId,
+        },
       });
       commit('deleteTask', { columnId, taskId });
     },
