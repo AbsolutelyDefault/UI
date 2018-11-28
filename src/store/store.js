@@ -10,149 +10,45 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isAuthenticated: vueAuth.isAuthenticated(),
-    columns: {
-      1: {
-        id: 1,
-        order: 1,
-        name: 'To do',
-        tasks: {
-          1: {
-            id: 1,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          11: {
-            id: 11,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          12: {
-            id: 12,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          13: {
-            id: 13,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          14: {
-            id: 14,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          15: {
-            id: 15,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          16: {
-            id: 16,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          17: {
-            id: 17,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          18: {
-            id: 18,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-          19: {
-            id: 19,
-            name: 'Task 1',
-            description: 'Description 1',
-          },
-        },
-      },
-      2: {
-        id: 2,
-        order: 2,
-        name: 'Blocked by blocking request of seven blocks (waiting)',
-        tasks: {
-          2: {
-            id: 2,
-            name: 'Task 2',
-            description: 'Extremely long description. Extremely long description. Extremely long description. Extremely long description. ',
-          },
-        },
-      },
-      3: {
-        id: 3,
-        order: 3,
-        name: 'In progress (development)',
-        tasks: {
-          3: {
-            id: 3,
-            name: 'Very long task name, so long task name Very long task name Very long task name',
-            description: 'Description 3',
-          },
-        },
-      },
-      5: {
-        id: 5,
-        order: 4,
-        name: 'Ready for QA (Inspection)',
-        tasks: {
-          5: {
-            id: 5,
-            name: 'Task 5',
-            description: 'Description 5',
-          },
-        },
-      },
-      6: {
-        id: 6,
-        order: 5,
-        name: 'In QA (Validation)',
-        tasks: {
-          51: {
-            id: 51,
-            name: 'Task 5',
-            description: 'Description 5',
-          },
-        },
-      },
-      7: {
-        id: 7,
-        order: 6,
-        name: 'Done (Resolved)',
-        tasks: {
-          52: {
-            id: 52,
-            name: 'Task 5',
-            description: 'Description 5',
-          },
-        },
-      },
-    },
-    nextTaskId: 100,
-    nextLineId: 100,
+    columns: [],
   },
   mutations: {
     isAuthenticated(state, payload) {
       state.isAuthenticated = payload.isAuthenticated;
     },
-    addTask(state, { item, lineId }) {
-      Vue.set(state.columns[lineId].tasks,
-        state.nextTaskId,
-        Object.assign(item, { id: state.nextTaskId }));
-      state.nextTaskId += 1;
+
+    setColumns(state, newColumns) {
+      Vue.set(state, 'columns', newColumns);
     },
-    deleteTask(state, { id, columnId }) {
-      Vue.delete(state.columns[columnId].tasks, id);
+    addTask(state, { item, columnId }) {
+      const column = state.columns.find(elem => elem._id === columnId);
+      column.tasks.push(item);
     },
-    addLine(state, item) {
-      Vue.set(state.columns,
-        state.nextLineId,
-        Object.assign(item, { id: state.nextLineId, tasks: {} }));
-      state.nextLineId += 1;
+    deleteTask(state, { taskId, columnId }) {
+      const column = state.columns.find(elem => elem._id === columnId);
+      Vue.set(column, 'tasks', column.tasks.filter(elem => elem._id !== taskId));
     },
-    deleteColumn(state, { id }) {
-      Vue.delete(state.columns, id);
+    addColumn(state, column) {
+      state.columns.push(column);
+    },
+    deleteColumn(state, id) {
+      Vue.set(state, 'columns', state.columns.filter(elem => elem._id !== id));
+    },
+    updateTask(state, {
+      columnId, taskId, name, description,
+    }) {
+      const column = state.columns.find(elem => elem._id === columnId);
+      const task = column.tasks.find(elem => elem._id === taskId);
+      if (name) {
+        Vue.set(task, 'name', name);
+      }
+      if (description) {
+        Vue.set(task, 'description', description);
+      }
+    },
+    updateColumnName(state, { id, name }) {
+      const column = state.columns.find(elem => elem._id === id);
+      Vue.set(column, 'name', name);
     },
   },
   actions: {
@@ -187,6 +83,59 @@ export default new Vuex.Store({
         await dispatch('signOut');
         router.push({ name: 'Login' });
       }
+    },
+
+    async getColumns({ commit }) {
+      const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/column`);
+      commit('setColumns', response.data);
+    },
+    async deleteColumn({ commit }, { id }) {
+      await axios.delete(`${process.env.VUE_APP_BASE_URL}/api/column`, {
+        id,
+      });
+      commit('deleteColumn', id);
+    },
+    async addColumn({ commit }, { name }) {
+      const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/api/column`, {
+        name,
+      });
+      commit('addColumn', response.data);
+    },
+    async deleteTask({ commit }, { columnId, taskId }) {
+      await axios.delete(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+        columnId,
+        id: taskId,
+      });
+      commit('deleteTask', { columnId, taskId });
+    },
+    async addTask({ commit }, { item, columnId }) {
+      await axios.post(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+        id: columnId,
+        name: item.name,
+        description: item.description,
+      });
+      commit('addTask', { item, columnId });
+    },
+    async updateTask({ commit }, {
+      columnId, taskId, name, description,
+    }) {
+      await axios.put(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+        id: taskId,
+        name,
+        description,
+      });
+      commit('updateTask', {
+        columnId, taskId, name, description,
+      });
+    },
+    async updateColumnName({ commit }, { id, name }) {
+      await axios.put(`${process.env.VUE_APP_BASE_URL}/api/column`, {
+        id,
+        name,
+      });
+      commit('updateColumnName', {
+        id, name,
+      });
     },
   },
 });

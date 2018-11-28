@@ -7,10 +7,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueTextareaAutosize from 'vue-textarea-autosize';
 import App from './App.vue';
 import router from './routers/router';
 import store from './store/store';
 
+Vue.use(VueTextareaAutosize);
 Vue.use(BootstrapVue);
 
 library.add(faGooglePlusG);

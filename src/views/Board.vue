@@ -3,7 +3,7 @@
     <menu-bar class="no-shrink"></menu-bar>
     <b-container class="column-container" fluid>
       <b-row class="flex-row flex-nowrap h-100">
-        <b-col v-for="item in columns" :key="item.id" class="task-column-wrapper">
+        <b-col v-for="item in columns" :key="item._id" class="task-column-wrapper">
           <task-column :item="item"></task-column>
         </b-col>
         <b-col class="task-column-wrapper">
@@ -40,13 +40,16 @@ export default {
   },
   methods: {
     addNewLine() {
-      this.$store.commit('addLine', { name: 'New line' });
+      this.$store.dispatch('addColumn', { name: 'New line' });
     },
   },
   computed: {
     columns() {
       return this.$store.state.columns;
     },
+  },
+  mounted() {
+    this.$store.dispatch('getColumns');
   },
 };
 </script>
