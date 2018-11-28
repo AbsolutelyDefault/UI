@@ -109,12 +109,12 @@ export default new Vuex.Store({
       commit('deleteTask', { columnId, taskId });
     },
     async addTask({ commit }, { item, columnId }) {
-      await axios.post(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+      const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
         id: columnId,
         name: item.name,
         description: item.description,
       });
-      commit('addTask', { item, columnId });
+      commit('addTask', { item: response.data, columnId });
     },
     async updateTask({ commit }, {
       columnId, taskId, name, description,
