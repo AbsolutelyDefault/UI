@@ -50,6 +50,10 @@ export default new Vuex.Store({
       const column = state.columns.find(elem => elem._id === id);
       Vue.set(column, 'name', name);
     },
+    updateTasks(state, { columnId, tasks }) {
+      const column = state.columns.find(elem => elem._id === columnId);
+      Vue.set(column, 'tasks', tasks);
+    },
   },
   actions: {
     async signOut({ commit }) {

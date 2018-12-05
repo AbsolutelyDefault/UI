@@ -2,18 +2,20 @@
   <div id="board">
     <menu-bar class="no-shrink"></menu-bar>
     <b-container class="column-container" fluid>
-      <b-row class="flex-row flex-nowrap h-100">
-        <b-col v-for="item in columns" :key="item._id" class="task-column-wrapper">
+      <draggable :element="'b-row'" class="flex-row flex-nowrap h-100" @update="onUpdate"
+                 :options="{draggable:'.task-column'}" v-model="draggables">
+        <b-col v-for="item in columns" :key="item._id" class="task-column-wrapper task-column"
+               :id="item._id">
           <task-column :item="item"></task-column>
         </b-col>
-        <b-col class="task-column-wrapper">
+        <b-col slot="footer" class="task-column-wrapper">
           <b-card class="mh-100" bg-variant="light">
             <b-button variant="outline-primary" class="add-task-btn" @click="addNewLine">
               Add new column
             </b-button>
           </b-card>
         </b-col>
-      </b-row>
+      </draggable>
     </b-container>
   </div>
 </template>
@@ -25,27 +27,46 @@ import bCol from 'bootstrap-vue/es/components/layout/col';
 import bCard from 'bootstrap-vue/es/components/card/card';
 import bButton from 'bootstrap-vue/es/components/button/button';
 import MenuBar from '@/components/MenuBar.vue';
+import Draggable from 'vuedraggable';
+import axios from 'axios';
 import TaskColumn from '../components/TaskColumn.vue';
 
 export default {
   name: 'Board',
   components: {
     'b-container': bContainer,
+    // Component is actually used instead of <draggable>
+    // eslint-disable-next-line vue/no-unused-components
     'b-row': bRow,
     'b-col': bCol,
     'menu-bar': MenuBar,
     'task-column': TaskColumn,
     'b-button': bButton,
     'b-card': bCard,
+    draggable: Draggable,
   },
   methods: {
     addNewLine() {
       this.$store.dispatch('addColumn', { name: 'New line' });
     },
+    onUpdate(evt) {
+      axios.patch(`${process.env.VUE_APP_BASE_URL}/api/column`, {
+        id: evt.item.id,
+        num: evt.newIndex,
+      });
+    },
   },
   computed: {
     columns() {
       return this.$store.state.columns;
+    },
+    draggables: {
+      get() {
+        return this.$store.state.columns;
+      },
+      set(items) {
+        this.$store.commit('setColumns', items);
+      },
     },
   },
   mounted() {
