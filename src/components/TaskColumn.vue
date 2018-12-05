@@ -13,9 +13,12 @@
         <font-awesome-icon icon="times"/>
       </h5>
     </div>
-    <div v-for="task in item.tasks" :key="task._id">
-      <item :item="task" :columnId="item._id"></item>
-    </div>
+    <draggable v-model="item.tasks" :options="{ group: 'tasks' }" @update="onUpdate" @add="onAdd"
+               :id="item._id">
+      <div v-for="task in item.tasks" :key="task._id" :id="task._id">
+        <item :item="task" :columnId="item._id"></item>
+      </div>
+    </draggable>
     <div slot="footer">
       <b-button variant="outline-primary" class="add-task-btn" @click="addNewTask">
         Add new task
@@ -26,6 +29,8 @@
 <script>
 import bCard from 'bootstrap-vue/es/components/card/card';
 import bButton from 'bootstrap-vue/es/components/button/button';
+import Draggable from 'vuedraggable';
+import axios from 'axios';
 import Task from './Task.vue';
 
 export default {
@@ -35,6 +40,7 @@ export default {
     item: Task,
     'b-card': bCard,
     'b-button': bButton,
+    draggable: Draggable,
   },
   data() {
     return {
@@ -55,6 +61,22 @@ export default {
     },
     updateName() {
       this.$store.dispatch('updateColumnName', { id: this.item._id, name: this.name });
+    },
+    onAdd(evt) {
+      axios.patch(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+        columnId: evt.from.id,
+        id: evt.item.id,
+        columnNewId: evt.to.id,
+        num: evt.newIndex,
+      });
+    },
+    onUpdate(evt) {
+      axios.patch(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+        columnId: evt.to.id,
+        id: evt.item.id,
+        columnNewId: evt.to.id,
+        num: evt.newIndex,
+      });
     },
   },
 };

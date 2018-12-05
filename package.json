@@ -25,6 +25,7 @@
     "vue-axios": "latest",
     "vue-router": "^3.0.1",
     "vue-textarea-autosize": "^1.0.4",
+    "vuedraggable": "^2.17.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
