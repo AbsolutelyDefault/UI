@@ -14,7 +14,7 @@
       </h5>
     </div>
     <draggable v-model="item.tasks" :options="{ group: 'tasks' }" @update="onUpdate" @add="onAdd"
-               :id="item._id">
+               :id="item._id" class="tasks-container">
       <div v-for="task in item.tasks" :key="task._id" :id="task._id">
         <item :item="task" :columnId="item._id"></item>
       </div>
@@ -97,5 +97,8 @@ export default {
   }
   .header-button {
     flex-grow: 0;
+  }
+  .tasks-container {
+    min-height: 15px;
   }
 </style>
