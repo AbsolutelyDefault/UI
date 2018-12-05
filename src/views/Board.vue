@@ -3,10 +3,11 @@
     <menu-bar class="no-shrink"></menu-bar>
     <b-container class="column-container" fluid>
       <draggable :element="'b-row'" class="flex-row flex-nowrap h-100" @update="onUpdate"
-                 :options="{draggable:'.task-column'}" v-model="draggables">
+                 :options="{draggable:'.task-column', handle: '.column-handle', disabled: isMobile}"
+                 v-model="draggables">
         <b-col v-for="item in columns" :key="item._id" class="task-column-wrapper task-column"
                :id="item._id">
-          <task-column :item="item"></task-column>
+          <task-column :item="item" class="column-handle"></task-column>
         </b-col>
         <b-col slot="footer" class="task-column-wrapper">
           <b-card class="mh-100" bg-variant="light">
@@ -28,6 +29,7 @@ import bCard from 'bootstrap-vue/es/components/card/card';
 import bButton from 'bootstrap-vue/es/components/button/button';
 import MenuBar from '@/components/MenuBar.vue';
 import Draggable from 'vuedraggable';
+import MobileDetect from 'mobile-detect';
 import axios from 'axios';
 import TaskColumn from '../components/TaskColumn.vue';
 
@@ -57,6 +59,13 @@ export default {
     },
   },
   computed: {
+    isMobile() {
+      const mb = new MobileDetect(navigator.userAgent);
+      if (mb.mobile()) {
+        return true;
+      }
+      return false;
+    },
     columns() {
       return this.$store.state.columns;
     },
@@ -89,7 +98,7 @@ export default {
     overflow-x: auto;
   }
   .task-column-wrapper {
-    height: 100%;
+
     padding-right: 2px;
     padding-left: 2px;
     -ms-flex: 0 0 272px;
