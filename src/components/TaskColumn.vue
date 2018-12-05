@@ -2,7 +2,7 @@
   <b-card class="mh-100" bg-variant="light" body-class="card-column-body">
     <div slot="header" class="header-container">
       <textarea-autosize
-        placeholder="Type something here..."
+        placeholder="Column name here..."
         class="form-control-plaintext h5 header-text"
         v-model="name"
         rows="1"
@@ -50,7 +50,7 @@ export default {
   methods: {
     addNewTask() {
       this.$store.dispatch('addTask', {
-        item: { name: 'New task', description: 'Description' },
+        item: { name: '', description: '' },
         columnId: this.item._id,
       });
     },
@@ -92,7 +92,7 @@ export default {
   }
   .header-text {
     flex-grow: 1;
-    padding-top: 0px;
+    padding-top: 0;
     padding-right: 8px;
   }
   .header-button {

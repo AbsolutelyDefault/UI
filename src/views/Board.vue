@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     addNewLine() {
-      this.$store.dispatch('addColumn', { name: 'New line' });
+      this.$store.dispatch('addColumn', { name: '' });
     },
     onUpdate(evt) {
       axios.patch(`${process.env.VUE_APP_BASE_URL}/api/column`, {
