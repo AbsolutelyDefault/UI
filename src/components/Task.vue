@@ -6,7 +6,7 @@
           body-class="task-body">
     <div slot="header" class="header-container">
       <textarea-autosize
-        placeholder="Type something here..."
+        placeholder="Task name here..."
         class="form-control-plaintext h6 header-text"
         v-model="name"
         rows="1"
@@ -18,7 +18,7 @@
       </h6>
     </div>
     <textarea-autosize
-      placeholder="Type something here..."
+      placeholder="Task description here..."
       class="form-control-plaintext card-text"
       v-model="description"
       rows="1"

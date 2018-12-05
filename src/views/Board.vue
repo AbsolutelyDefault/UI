@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     addNewLine() {
-      this.$store.dispatch('addColumn', { name: 'New line' });
+      this.$store.dispatch('addColumn', { name: '' });
     },
   },
   computed: {
