@@ -13,8 +13,8 @@
         <font-awesome-icon icon="times"/>
       </h5>
     </div>
-    <draggable v-model="item.tasks" :options="{ group: 'tasks' }" @update="onUpdate" @add="onAdd"
-               :id="item._id" class="tasks-container">
+    <draggable v-model="item.tasks" :options="{ group: 'tasks', disabled: isMobile }"
+               @update="onUpdate" @add="onAdd" :id="item._id" class="tasks-container">
       <div v-for="task in item.tasks" :key="task._id" :id="task._id">
         <item :item="task" :columnId="item._id"></item>
       </div>
@@ -30,6 +30,7 @@
 import bCard from 'bootstrap-vue/es/components/card/card';
 import bButton from 'bootstrap-vue/es/components/button/button';
 import Draggable from 'vuedraggable';
+import MobileDetect from 'mobile-detect';
 import axios from 'axios';
 import Task from './Task.vue';
 
@@ -46,6 +47,15 @@ export default {
     return {
       name: this.item.name,
     };
+  },
+  computed: {
+    isMobile() {
+      const mb = new MobileDetect(navigator.userAgent);
+      if (mb.mobile()) {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     addNewTask() {
