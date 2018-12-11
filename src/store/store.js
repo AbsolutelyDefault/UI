@@ -11,6 +11,7 @@ export default new Vuex.Store({
   state: {
     isAuthenticated: vueAuth.isAuthenticated(),
     columns: [],
+    boardId: '',
   },
   mutations: {
     isAuthenticated(state, payload) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
 
     setColumns(state, newColumns) {
       Vue.set(state, 'columns', newColumns);
+    },
+    setBoardId(state, boardId) {
+      Vue.set(state, 'boardId', boardId);
     },
     addTask(state, { item, columnId }) {
       const column = state.columns.find(elem => elem._id === columnId);
@@ -91,15 +95,16 @@ export default new Vuex.Store({
 
     async getColumns({ commit }) {
       const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/column`);
-      commit('setColumns', response.data);
+      commit('setColumns', response.data.columns);
+      commit('setBoardId', response.data.boardId);
     },
     async deleteColumn({ commit }, { id }) {
       await axios.delete(`${process.env.VUE_APP_BASE_URL}/api/column`, { data: { id } });
       commit('deleteColumn', id);
     },
-    async addColumn({ commit }, { name }) {
+    async addColumn({ commit }, { name, boardId }) {
       const response = await axios.post(`${process.env.VUE_APP_BASE_URL}/api/column`, {
-        name,
+        name, boardId,
       });
       commit('addColumn', response.data);
     },
