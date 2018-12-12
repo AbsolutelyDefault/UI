@@ -23,7 +23,7 @@
       <h6 slot="modal-header">Link to this board</h6>
       <div slot="modal-footer"></div>
       <b-input-group>
-        <b-input-group-text class="form-control">{{getCurrentPath}}</b-input-group-text>
+        <b-form-input class="form-control" :value="getCurrentPath" disabled></b-form-input>
         <b-input-group-append>
           <b-button variant="primary sm" v-clipboard:copy="getCurrentPath">
             Click To Copy
@@ -44,7 +44,7 @@ import bButton from 'bootstrap-vue/es/components/button/button';
 import bModal from 'bootstrap-vue/es/components/modal/modal';
 import bInputGroup from 'bootstrap-vue/es/components/input-group/input-group';
 import bInputGroupAppend from 'bootstrap-vue/es/components/input-group/input-group-append';
-import bInputGroupText from 'bootstrap-vue/es/components/input-group/input-group-text';
+import bFormInput from 'bootstrap-vue/es/components/form-input/form-input';
 
 export default {
   name: 'MenuBar',
@@ -61,7 +61,7 @@ export default {
     'b-modal': bModal,
     'b-input-group': bInputGroup,
     'b-input-group-append': bInputGroupAppend,
-    'b-input-group-text': bInputGroupText,
+    'b-form-input': bFormInput,
   },
   data() {
     return {
