@@ -37,6 +37,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  if (to.query.code) return;
   const authRequired = to.matched.some(route => route.meta.auth);
   const authed = store.state.isAuthenticated;
   if (authRequired && !authed) {
