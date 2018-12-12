@@ -32,6 +32,9 @@ export default new Vuex.Store({
     setBoardId(state, boardId) {
       Vue.set(state, 'boardId', boardId);
     },
+    setEditable(state, editable) {
+      Vue.set(state, 'editable', editable);
+    },
     addTask(state, { item, columnId }) {
       const column = state.columns.find(elem => elem._id === columnId);
       column.tasks.push(item);
@@ -125,10 +128,16 @@ export default new Vuex.Store({
       }
     },
 
-    async getColumns({ commit }) {
-      const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/column`);
+    async getColumns({ commit }, { id }) {
+      let response;
+      if (id) {
+        response = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/column?id=${id}`);
+      } else {
+        response = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/column`);
+      }
       commit('setColumns', response.data.columns);
       commit('setBoardId', response.data.boardId);
+      commit('setEditable', response.data.editable);
     },
     async deleteColumn({ commit }, { id }) {
       await axios.delete(`${process.env.VUE_APP_BASE_URL}/api/column`, { data: { id } });
