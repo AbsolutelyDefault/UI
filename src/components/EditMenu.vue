@@ -34,7 +34,8 @@
       <b-row>
         <b-col v-if="type === 'task'">
           <h6>Column</h6>
-          <b-form-select v-model="selectedColumn" :options="columns" class="mb-2"/>
+          <b-form-select v-model="selectedColumn" :options="columns" class="mb-2"
+                         @change.native="defaultTaskPosition"/>
         </b-col>
         <b-col>
           <h6>Position</h6>
@@ -99,11 +100,15 @@ export default {
   },
   computed: {
     columns() { return this.$store.getters.getColumnNames; },
-    columnsNumber() { return this.$store.getters.getColumnsNumber; },
+    columnsNumber() { return this.$store.getters.getColumnsNumber + 1; },
     tasksNumber() { return this.$store.getters.getTasksNumber(this.selectedColumn); },
     positions() {
       if (this.type === 'task') {
-        return Array.from(new Array(this.tasksNumber), (val, index) => index + 1);
+        let size = this.tasksNumber;
+        if (this.selectedColumn !== this.$props.initialColumn) {
+          size += 1;
+        }
+        return Array.from(new Array(size), (val, index) => index + 1);
       }
       return Array.from(new Array(this.columnsNumber), (val, index) => index + 1);
     },
@@ -128,6 +133,9 @@ export default {
       } else {
         this.$emit('closed', { position: this.selectedPosition - 1 });
       }
+    },
+    defaultTaskPosition() {
+      this.selectedPosition = 1;
     },
   },
 };
