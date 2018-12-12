@@ -99,8 +99,8 @@ export default {
   },
   computed: {
     columns() { return this.$store.getters.getColumnNames; },
-    columnsNumber() { return this.$store.getters.getColumnsNumber; },
-    tasksNumber() { return this.$store.getters.getTasksNumber(this.selectedColumn); },
+    columnsNumber() { return this.$store.getters.getColumnsNumber + 1; },
+    tasksNumber() { return this.$store.getters.getTasksNumber(this.selectedColumn) + 1; },
     positions() {
       if (this.type === 'task') {
         return Array.from(new Array(this.tasksNumber), (val, index) => index + 1);
