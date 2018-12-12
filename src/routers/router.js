@@ -7,9 +7,10 @@ import store from '../store/store';
 Vue.use(Router);
 
 const router = new Router({
+  mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/$',
       redirect: '/board',
       meta: { auth: false },
     },
