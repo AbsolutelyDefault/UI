@@ -61,7 +61,7 @@ export default {
         name: 'Board',
       });
       const { location } = window;
-      return `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}/${props.href}?id=${this.boardId}`;
+      return `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}${props.href}?id=${this.boardId}`;
     },
   },
   methods: {
