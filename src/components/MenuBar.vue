@@ -23,6 +23,9 @@
       <h6 slot="modal-header">Link to this board</h6>
       <div slot="modal-footer"></div>
       <h5>{{getCurrentPath}}</h5>
+      <b-button variant="primary sm" v-clipboard:copy="getCurrentPath">
+        Copy to clipboard
+      </b-button>
     </b-modal>
   </div>
 </template>
