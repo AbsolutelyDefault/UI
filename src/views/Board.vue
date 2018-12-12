@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     addNewLine() {
-      this.$store.dispatch('addColumn', { name: '' });
+      this.$store.dispatch('addColumn', { name: '', boardId: this.$store.state.boardId });
     },
     onUpdate(evt) {
       this.$store.dispatch('sendColumnPosition', {
