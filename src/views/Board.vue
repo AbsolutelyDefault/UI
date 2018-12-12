@@ -1,15 +1,17 @@
 <template>
   <div id="board">
-    <menu-bar class="no-shrink"></menu-bar>
+    <menu-bar :boardId="boardId" class="no-shrink"></menu-bar>
     <b-container class="column-container" fluid>
       <draggable :element="'b-row'" class="flex-row flex-nowrap h-100" @update="onUpdate"
-                 :options="{draggable:'.task-column', handle: '.column-handle', disabled: isMobile}"
+                 :options="{draggable:'.task-column', handle: '.column-handle', disabled: noDrag}"
                  v-model="draggables">
         <b-col v-for="(item, index) in columns" :key="item._id"
                class="task-column-wrapper task-column" :id="item._id">
-          <task-column :item="item" :index="index" class="column-handle"></task-column>
+          <task-column :item="item" :index="index" :editable="editable" :noDrag="noDrag"
+                       class="column-handle">
+          </task-column>
         </b-col>
-        <b-col slot="footer" class="task-column-wrapper">
+        <b-col v-if="editable" slot="footer" class="task-column-wrapper">
           <b-card class="mh-100" bg-variant="light">
             <b-button variant="outline-primary" class="add-task-btn" @click="addNewLine">
               Add new column
@@ -58,12 +60,18 @@ export default {
     },
   },
   computed: {
-    isMobile() {
+    noDrag() {
+      if (!this.editable) {
+        return true;
+      }
       const mb = new MobileDetect(navigator.userAgent);
       return mb.mobile();
     },
     columns() {
       return this.$store.state.columns;
+    },
+    boardId() {
+      return this.$store.state.boardId;
     },
     draggables: {
       get() {
@@ -73,9 +81,14 @@ export default {
         this.$store.commit('setColumns', items);
       },
     },
+    editable() { return this.$store.state.editable; },
   },
   mounted() {
-    this.$store.dispatch('getColumns');
+    if (this.$route.query) {
+      this.$store.dispatch('getColumns', { id: this.$route.query.id });
+    } else {
+      this.$store.dispatch('getColumns');
+    }
   },
 };
 </script>

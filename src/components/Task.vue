@@ -5,16 +5,16 @@
     <div slot="header" class="header-container">
       <textarea-autosize placeholder="Task name here..."
                          class="form-control-plaintext h6 header-text" v-model="name" rows="1"
-                         spellcheck="false" @change.native="updateTask"
+                         spellcheck="false" @change.native="updateTask" :readonly="!editable"
       ></textarea-autosize>
-      <edit-menu class="task-header header-button" v-on:color="setColor" v-on:remove="deleteTask"
-                 :type="'task'" :initialColumn="columnId" :initialPosition="index"
-                 v-on:closed="updatePosition"
+      <edit-menu v-if="editable" class="task-header header-button" v-on:color="setColor"
+                 v-on:remove="deleteTask" :type="'task'" :initialColumn="columnId"
+                 :initialPosition="index" v-on:closed="updatePosition"
       ></edit-menu>
     </div>
     <textarea-autosize placeholder="Task description here..."
                        class="form-control-plaintext card-text" v-model="description" rows="1"
-                       spellcheck="false" @change.native="updateTask"
+                       spellcheck="false" @change.native="updateTask" :readonly="!editable"
     ></textarea-autosize>
   </b-card>
   </div>
@@ -30,6 +30,7 @@ export default {
     item: Object,
     columnId: String,
     index: Number,
+    editable: Boolean,
   },
   components: {
     'b-card': bCard,

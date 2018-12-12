@@ -3,19 +3,19 @@
     <div slot="header" class="header-container">
       <textarea-autosize placeholder="Column name here..."
                          class="form-control-plaintext h5 header-text" v-model="name" rows="1"
-                         spellcheck="false" @change.native="updateName"
+                         spellcheck="false" @change.native="updateName" :readonly="!editable"
       ></textarea-autosize>
-      <edit-menu class="task-header header-button" v-on:remove="deleteColumn"
+      <edit-menu v-if="editable" class="task-header header-button" v-on:remove="deleteColumn"
                  :initial-position="index" v-on:closed="updatePosition">
       </edit-menu>
     </div>
-    <draggable v-model="item.tasks" :options="{ group: 'tasks', disabled: isMobile }"
+    <draggable v-model="item.tasks" :options="{ group: 'tasks', disabled: noDrag }"
                @update="onUpdate" @add="onAdd" :id="item._id" class="tasks-container">
       <div v-for="(task, taskIndex) in item.tasks" :key="task._id" :id="task._id">
-        <item :item="task" :columnId="item._id" :index="taskIndex"></item>
+        <item :item="task" :columnId="item._id" :index="taskIndex" :editable="editable"></item>
       </div>
     </draggable>
-    <div slot="footer">
+    <div v-if="editable" slot="footer">
       <b-button variant="outline-primary" class="add-task-btn" @click="addNewTask">
         Add new task
       </b-button>
@@ -26,7 +26,6 @@
 import bCard from 'bootstrap-vue/es/components/card/card';
 import bButton from 'bootstrap-vue/es/components/button/button';
 import Draggable from 'vuedraggable';
-import MobileDetect from 'mobile-detect';
 import Task from './Task.vue';
 import EditMenu from './EditMenu.vue';
 
@@ -35,6 +34,8 @@ export default {
   props: {
     item: Object,
     index: Number,
+    editable: Boolean,
+    noDrag: Boolean,
   },
   components: {
     item: Task,
@@ -47,12 +48,6 @@ export default {
     return {
       name: this.item.name,
     };
-  },
-  computed: {
-    isMobile() {
-      const mb = new MobileDetect(navigator.userAgent);
-      return mb.mobile();
-    },
   },
   methods: {
     addNewTask() {
