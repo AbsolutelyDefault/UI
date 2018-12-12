@@ -18,7 +18,6 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
       clientId: process.env.VUE_APP_GOOGLE_CLIENT_ID,
       url: process.env.VUE_APP_BASE_PATH,
       authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
-      redirectUri: window.location.origin,
       requiredUrlParams: ['scope'],
       optionalUrlParams: ['display'],
       scope: ['profile', 'email'],
