@@ -34,7 +34,8 @@
       <b-row>
         <b-col v-if="type === 'task'">
           <h6>Column</h6>
-          <b-form-select v-model="selectedColumn" :options="columns" class="mb-2"/>
+          <b-form-select v-model="selectedColumn" :options="columns" class="mb-2"
+                         @change.native="defaultTaskPosition"/>
         </b-col>
         <b-col>
           <h6>Position</h6>
@@ -128,6 +129,9 @@ export default {
       } else {
         this.$emit('closed', { position: this.selectedPosition - 1 });
       }
+    },
+    defaultTaskPosition() {
+      this.selectedPosition = 1;
     },
   },
 };
