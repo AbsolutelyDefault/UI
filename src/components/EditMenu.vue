@@ -94,7 +94,7 @@ export default {
       ],
       modalShow: false,
       selectedColumn: this.initialColumn,
-      selectedPosition: this.initialPosition,
+      selectedPosition: this.initialPosition + 1,
     };
   },
   computed: {
@@ -103,9 +103,9 @@ export default {
     tasksNumber() { return this.$store.getters.getTasksNumber(this.selectedColumn); },
     positions() {
       if (this.type === 'task') {
-        return Array.from(Array(this.tasksNumber).keys());
+        return Array.from(new Array(this.tasksNumber), (val, index) => index + 1);
       }
-      return Array.from(Array(this.columnsNumber).keys());
+      return Array.from(new Array(this.columnsNumber), (val, index) => index + 1);
     },
   },
   methods: {
@@ -118,15 +118,15 @@ export default {
     switchModalShow() {
       if (!this.modalShow) {
         this.selectedColumn = this.$props.initialColumn;
-        this.selectedPosition = this.$props.initialPosition;
+        this.selectedPosition = this.$props.initialPosition + 1;
       }
       this.modalShow = !this.modalShow;
     },
     onHidden() {
       if (this.type === 'task') {
-        this.$emit('closed', { position: this.selectedPosition, column: this.selectedColumn });
+        this.$emit('closed', { position: this.selectedPosition - 1, column: this.selectedColumn });
       } else {
-        this.$emit('closed', { position: this.selectedPosition });
+        this.$emit('closed', { position: this.selectedPosition - 1 });
       }
     },
   },
