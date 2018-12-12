@@ -101,10 +101,14 @@ export default {
   computed: {
     columns() { return this.$store.getters.getColumnNames; },
     columnsNumber() { return this.$store.getters.getColumnsNumber + 1; },
-    tasksNumber() { return this.$store.getters.getTasksNumber(this.selectedColumn) + 1; },
+    tasksNumber() { return this.$store.getters.getTasksNumber(this.selectedColumn); },
     positions() {
       if (this.type === 'task') {
-        return Array.from(new Array(this.tasksNumber), (val, index) => index + 1);
+        let size = this.tasksNumber;
+        if (this.selectedColumn !== this.$props.initialColumn) {
+          size += 1;
+        }
+        return Array.from(new Array(size), (val, index) => index + 1);
       }
       return Array.from(new Array(this.columnsNumber), (val, index) => index + 1);
     },
