@@ -8,7 +8,9 @@
 
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
-        <b-nav-item @click="modalShow = !modalShow">Get Link</b-nav-item>
+        <b-button variant="outline-light" @click="modalShow = !modalShow">
+          Get Link
+        </b-button>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto" right>
         <b-button variant="outline-light" @click="signOut()">
@@ -32,7 +34,6 @@ import bNavbarBrand from 'bootstrap-vue/es/components/navbar/navbar-brand';
 import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
 import bNavbarNav from 'bootstrap-vue/es/components/navbar/navbar-nav';
 import bButton from 'bootstrap-vue/es/components/button/button';
-import bNavItem from 'bootstrap-vue/es/components/nav/nav-item';
 import bModal from 'bootstrap-vue/es/components/modal/modal';
 
 export default {
@@ -47,7 +48,6 @@ export default {
     'b-collapse': bCollapse,
     'b-navbar-nav': bNavbarNav,
     'b-button': bButton,
-    'b-nav-item': bNavItem,
     'b-modal': bModal,
   },
   data() {
