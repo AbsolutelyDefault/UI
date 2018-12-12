@@ -22,10 +22,14 @@
     <b-modal size="lg" v-model="modalShow">
       <h6 slot="modal-header">Link to this board</h6>
       <div slot="modal-footer"></div>
-      <h5>{{getCurrentPath}}</h5>
-      <b-button variant="primary sm" v-clipboard:copy="getCurrentPath">
-        Copy to clipboard
-      </b-button>
+      <b-input-group>
+        <b-input-group-text class="form-control">{{getCurrentPath}}</b-input-group-text>
+        <b-input-group-append>
+          <b-button variant="primary sm" v-clipboard:copy="getCurrentPath">
+            Click To Copy
+          </b-button>
+        </b-input-group-append>
+      </b-input-group>
     </b-modal>
   </div>
 </template>
@@ -38,6 +42,9 @@ import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
 import bNavbarNav from 'bootstrap-vue/es/components/navbar/navbar-nav';
 import bButton from 'bootstrap-vue/es/components/button/button';
 import bModal from 'bootstrap-vue/es/components/modal/modal';
+import bInputGroup from 'bootstrap-vue/es/components/input-group/input-group';
+import bInputGroupAppend from 'bootstrap-vue/es/components/input-group/input-group-append';
+import bInputGroupText from 'bootstrap-vue/es/components/input-group/input-group-text';
 
 export default {
   name: 'MenuBar',
@@ -52,6 +59,9 @@ export default {
     'b-navbar-nav': bNavbarNav,
     'b-button': bButton,
     'b-modal': bModal,
+    'b-input-group': bInputGroup,
+    'b-input-group-append': bInputGroupAppend,
+    'b-input-group-text': bInputGroupText,
   },
   data() {
     return {
