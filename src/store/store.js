@@ -12,6 +12,14 @@ export default new Vuex.Store({
     isAuthenticated: vueAuth.isAuthenticated(),
     columns: [],
   },
+  getters: {
+    getColumnIndex: state => id => state.columns.findIndex(elem => elem._id === id),
+    getColumnNames: state => state.columns.map(
+      value => ({ value: value._id, text: value.name }),
+    ),
+    getColumnsNumber: state => state.columns.length,
+    getTasksNumber: state => id => state.columns.find(elem => elem._id === id).tasks.length,
+  },
   mutations: {
     isAuthenticated(state, payload) {
       state.isAuthenticated = payload.isAuthenticated;
@@ -53,6 +61,30 @@ export default new Vuex.Store({
     updateTasks(state, { columnId, tasks }) {
       const column = state.columns.find(elem => elem._id === columnId);
       Vue.set(column, 'tasks', tasks);
+    },
+    setTaskColor(state, { columnId, taskId, color }) {
+      const column = state.columns.find(elem => elem._id === columnId);
+      const task = column.tasks.find(elem => elem._id === taskId);
+      Vue.set(task, 'color', color);
+    },
+    setColumnPosition(state, { id, position }) {
+      const { columns } = state;
+      const index = columns.findIndex(elem => elem._id === id);
+      columns.splice(position, 0, columns.splice(index, 1)[0]);
+    },
+    setTaskPosition(state, {
+      columnId, taskId, columnNewId, position,
+    }) {
+      const column = state.columns.find(elem => elem._id === columnId);
+      const { tasks } = column;
+      const index = tasks.findIndex(elem => elem._id === taskId);
+      const task = tasks.splice(index, 1)[0];
+      if (columnId === columnNewId) {
+        tasks.splice(position, 0, task);
+      } else {
+        const columnNew = state.columns.find(elem => elem._id === columnNewId);
+        columnNew.tasks.splice(position, 0, task);
+      }
     },
   },
   actions: {
@@ -120,13 +152,21 @@ export default new Vuex.Store({
       });
       commit('addTask', { item: response.data, columnId });
     },
-    async updateTask({ commit }, {
-      columnId, taskId, name, description,
+    async sendUpdateTask(state, {
+      taskId, name, description, color,
     }) {
-      await axios.put(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+      axios.put(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
         id: taskId,
         name,
         description,
+        color,
+      });
+    },
+    async updateTask({ commit, dispatch }, {
+      columnId, taskId, name, description, color,
+    }) {
+      await dispatch('sendUpdateTask', {
+        taskId, name, description, color,
       });
       commit('updateTask', {
         columnId, taskId, name, description,
@@ -140,6 +180,46 @@ export default new Vuex.Store({
       commit('updateColumnName', {
         id, name,
       });
+    },
+    async setTaskColor({ commit, dispatch }, {
+      columnId, taskId, name, description, color,
+    }) {
+      await dispatch('sendUpdateTask', {
+        taskId, name, description, color,
+      });
+      commit('setTaskColor', {
+        columnId, taskId, color,
+      });
+    },
+    async sendColumnPosition(state, { id, position }) {
+      axios.patch(`${process.env.VUE_APP_BASE_URL}/api/column`, {
+        id,
+        num: position,
+      });
+    },
+    async sendTaskPosition(state, {
+      columnId, taskId, columnNewId, position,
+    }) {
+      axios.patch(`${process.env.VUE_APP_BASE_URL}/api/column/task`, {
+        columnId,
+        id: taskId,
+        columnNewId,
+        num: position,
+      });
+    },
+    async setTaskPosition({ dispatch, commit }, {
+      columnId, taskId, columnNewId, position,
+    }) {
+      await dispatch('sendTaskPosition', {
+        columnId, taskId, columnNewId, position,
+      });
+      commit('setTaskPosition', {
+        columnId, taskId, columnNewId, position,
+      });
+    },
+    async setColumnPosition({ dispatch, commit }, { id, position }) {
+      await dispatch('sendColumnPosition', { id, position });
+      commit('setColumnPosition', { id, position });
     },
   },
 });

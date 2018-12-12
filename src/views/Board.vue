@@ -5,9 +5,9 @@
       <draggable :element="'b-row'" class="flex-row flex-nowrap h-100" @update="onUpdate"
                  :options="{draggable:'.task-column', handle: '.column-handle', disabled: isMobile}"
                  v-model="draggables">
-        <b-col v-for="item in columns" :key="item._id" class="task-column-wrapper task-column"
-               :id="item._id">
-          <task-column :item="item" class="column-handle"></task-column>
+        <b-col v-for="(item, index) in columns" :key="item._id"
+               class="task-column-wrapper task-column" :id="item._id">
+          <task-column :item="item" :index="index" class="column-handle"></task-column>
         </b-col>
         <b-col slot="footer" class="task-column-wrapper">
           <b-card class="mh-100" bg-variant="light">
@@ -30,7 +30,6 @@ import bButton from 'bootstrap-vue/es/components/button/button';
 import MenuBar from '@/components/MenuBar.vue';
 import Draggable from 'vuedraggable';
 import MobileDetect from 'mobile-detect';
-import axios from 'axios';
 import TaskColumn from '../components/TaskColumn.vue';
 
 export default {
@@ -52,19 +51,16 @@ export default {
       this.$store.dispatch('addColumn', { name: '' });
     },
     onUpdate(evt) {
-      axios.patch(`${process.env.VUE_APP_BASE_URL}/api/column`, {
+      this.$store.dispatch('sendColumnPosition', {
         id: evt.item.id,
-        num: evt.newIndex,
+        position: evt.newIndex,
       });
     },
   },
   computed: {
     isMobile() {
       const mb = new MobileDetect(navigator.userAgent);
-      if (mb.mobile()) {
-        return true;
-      }
-      return false;
+      return mb.mobile();
     },
     columns() {
       return this.$store.state.columns;

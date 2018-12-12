@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTextareaAutosize from 'vue-textarea-autosize';
 import App from './App.vue';
@@ -16,7 +16,7 @@ Vue.use(VueTextareaAutosize);
 Vue.use(BootstrapVue);
 
 library.add(faGooglePlusG);
-library.add(faTimes);
+library.add(faEllipsisH);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.config.productionTip = false;
